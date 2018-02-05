@@ -9,7 +9,6 @@ const app = express();
 const server = require('./server.js')(app);
 
 
-
 app.use('/', express.static(__dirname + '/views')); // html
 app.use(express.static(__dirname + '/public')); // js, css, images
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -86,6 +85,7 @@ api.get('/:question', function (req, res){
         });
     apiaiReq.on('error', function (error) {
         res.status(404)
+
         console.log(error);
     });
     apiaiReq.end();
@@ -101,5 +101,3 @@ function uniqueSession(sessionList){
     //console.log(session)
     return session;
 }
-
-module.exports = app

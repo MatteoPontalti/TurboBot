@@ -7,5 +7,5 @@ npm install
 ### To run the server:
 
 ```
-node index.js
+node app
 ```
