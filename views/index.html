@@ -11,11 +11,13 @@
 <div id="chatbox">
 </div>
 <form action="">
-    <input id="m" placeholder="Fammi una domanda..." autocomplete="off"/>
+    <textarea type="text" id="m" placeholder="Fammi una domanda..." autocomplete="off" rows="1"></textarea>
+	<img src="img/mic.png" onclick="speak();">
     <button>Invia</button>
 </form>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="js/script.js"></script>
+<script src="js/speech.js"></script>
 </body>
 </html>
