@@ -1,20 +1,23 @@
 /*globals require, console, process */
 
 const express = require('express');
-require('dotenv').config()
-bodyParser = require('body-parser');
-const apiai = require('apiai')(process.env.APIAI_TOKEN);
-const ArrayList = require('arraylist');
 const app = express();
-const server = require('./server.js')(app);
-
+const env = require('./env.js');
+bodyParser = require('body-parser');
+const APIAI_TOKEN = env.APIAI_TOKEN;
+const apiai = require('apiai')(APIAI_TOKEN);
+const ArrayList = require('arraylist');
 
 app.use('/', express.static(__dirname + '/views')); // html
 app.use(express.static(__dirname + '/public')); // js, css, images
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const io = require('socket.io').listen(server);
+const server = app.listen(process.env.PORT || 5000, function () {
+    console.log('Express server listening on port %d in %s mode', server.address().port, app.settings.env);
+});
+
+const io = require('socket.io')(server);
 var sessionList = new ArrayList;
 io.on('connection', function (socket) {
     //console.log('a user connected');
@@ -63,7 +66,6 @@ api.post('/', function (req, res){
     //console.log(sessionId);
     apiaiReq.on('response', function (response) {
         var risposta = {Risposta: response.result.fulfillment.messages[0].speech}
-        res.status=200
         res.json(risposta)
         });
     apiaiReq.on('error', function (error) {
@@ -84,8 +86,7 @@ api.get('/:question', function (req, res){
         res.json(risposta)
         });
     apiaiReq.on('error', function (error) {
-        res.status(404)
-
+        res.sendStatus(404)
         console.log(error);
     });
     apiaiReq.end();
